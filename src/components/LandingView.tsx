@@ -72,7 +72,7 @@ export function LandingView({ page }: { page: LandingPage }) {
         <h2 className="text-3xl font-bold md:text-4xl">Kenapa pilih {page.brand}?</h2>
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {page.features.map((f, i) => {
-            const Icon = icons[i % icons.length];
+            const Icon = icons[i % icons.length]!;
             return (
               <div
                 key={f.title + i}
