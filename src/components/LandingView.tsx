@@ -149,13 +149,13 @@ export function LandingView({ page }: { page: LandingPage }) {
 
       <section className="mx-auto max-w-6xl px-5 pb-20">
         <div className="rounded-3xl border border-ember/40 bg-surface-gradient p-10 text-center">
-          <h2 className="text-3xl font-bold md:text-4xl">Siap jalankan botmu hari ini?</h2>
+          <h2 className="text-3xl font-bold md:text-4xl">Link Download Di Bawah</h2>
           <p className="mx-auto mt-3 max-w-xl text-muted-foreground">{page.footerNote}</p>
           <a
-            href={page.ctaUrl || "#harga"}
+            href={page.whatsapp}
             className="mt-7 inline-block rounded-full bg-ember-gradient px-8 py-3 text-sm font-semibold text-ember-foreground shadow-ember transition-transform hover:scale-[1.03]"
           >
-            {page.ctaLabel}
+            CLICK DI SINI
           </a>
         </div>
       </section>
