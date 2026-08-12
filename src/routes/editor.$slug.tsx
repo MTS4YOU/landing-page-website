@@ -144,7 +144,7 @@ function Editor() {
                 <Input value={page.secondaryUrl} onChange={(e) => set("secondaryUrl", e.target.value)} />
               </Field>
             </div>
-            <Field label="Nomor WhatsApp order (628...)">
+            <Field label="Link Tujuan">
               <Input value={page.whatsapp} onChange={(e) => set("whatsapp", e.target.value)} />
             </Field>
           </section>
@@ -284,11 +284,11 @@ function Editor() {
           </section>
 
           <section className="space-y-4 rounded-2xl border border-border bg-surface p-5">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-ember">Testimoni & Penutup</h2>
-            <Field label="Testimoni">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-ember">Penutup</h2>
+            <Field label="Quoted">
               <Textarea rows={3} value={page.testimonial} onChange={(e) => set("testimonial", e.target.value)} />
             </Field>
-            <Field label="Nama pemberi testimoni">
+            <Field label="Footer">
               <Input value={page.testimonialAuthor} onChange={(e) => set("testimonialAuthor", e.target.value)} />
             </Field>
             <Field label="Catatan penutup">
