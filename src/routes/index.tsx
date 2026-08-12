@@ -1,22 +1,42 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Plus, ExternalLink, Pencil, Trash2, Copy, LayoutTemplate } from "lucide-react";
+import {
+  Plus,
+  ExternalLink,
+  Pencil,
+  Trash2,
+  Copy,
+  LayoutTemplate,
+  Settings,
+  LogOut,
+} from "lucide-react";
 import { toast } from "sonner";
-import { loadPages, deletePage, emptyPage, upsertPage, slugify, type LandingPage } from "@/lib/landing-store";
+import {
+  loadPages,
+  deletePage,
+  emptyPage,
+  upsertPage,
+  slugify,
+  type LandingPage,
+} from "@/lib/landing-store";
+import { isSessionActive, initializeAuth, logout } from "@/lib/auth-store";
+import { AuthDialog } from "@/components/AuthDialog";
+import { AdminSettingsDialog } from "@/components/AdminSettingsDialog";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "NodeEmber Builder — Buat Banyak Landing Page Promosi" },
+      { title: "Multi Lander Magic — Buat Banyak Landing Page" },
       {
         name: "description",
         content:
-          "Bikin dan kelola banyak landing page promosi Panel Bot Pterodactyl dengan link tujuan sendiri, langsung dari browser.",
+          "Buat dan kelola banyak landing page profesional untuk berbagai campaign Anda dengan mudah, langsung dari browser.",
       },
-      { property: "og:title", content: "NodeEmber Builder — Buat Banyak Landing Page Promosi" },
+      { property: "og:title", content: "Multi Lander Magic — Buat Banyak Landing Page" },
       {
         property: "og:description",
-        content: "Kelola banyak landing page promosi produk dengan link tujuan berbeda dalam satu dashboard.",
+        content:
+          "Kelola banyak landing page dengan link tujuan berbeda dan tema yang dapat disesuaikan dalam satu dashboard.",
       },
     ],
   }),
@@ -26,11 +46,29 @@ export const Route = createFileRoute("/")({
 function Dashboard() {
   const [pages, setPages] = useState<LandingPage[]>([]);
   const [ready, setReady] = useState(false);
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [showSettingsDialog, setShowSettingsDialog] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    setPages(loadPages());
-    setReady(true);
+    initializeAuth();
+    const authenticated = isSessionActive();
+    setIsAuthenticated(authenticated);
+
+    if (!authenticated) {
+      setShowAuthDialog(true);
+    } else {
+      setPages(loadPages());
+      setReady(true);
+    }
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setPages(loadPages());
+      setReady(true);
+    }
+  }, [isAuthenticated]);
 
   const remove = (slug: string) => {
     deletePage(slug);
@@ -60,17 +98,52 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background">
+      <AuthDialog
+        open={showAuthDialog}
+        onClose={() => setShowAuthDialog(false)}
+        onSuccess={() => setIsAuthenticated(true)}
+      />
+      <AdminSettingsDialog open={showSettingsDialog} onClose={() => setShowSettingsDialog(false)} />
+
       <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-ember-gradient opacity-[0.12] blur-[120px]" />
       <div className="relative mx-auto max-w-5xl px-5 py-14">
-        <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs uppercase tracking-[0.18em] text-muted-foreground">
-          <LayoutTemplate className="h-3.5 w-3.5 text-ember" /> Landing Page Builder
-        </span>
-        <h1 className="mt-5 text-4xl font-bold md:text-5xl">
-          Buat banyak <span className="text-ember-gradient">landing page promosi</span>
-        </h1>
+        <div className="flex items-start justify-between gap-4 mb-6">
+          <div>
+            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs uppercase tracking-[0.18em] text-muted-foreground">
+              <LayoutTemplate className="h-3.5 w-3.5 text-ember" /> Landing Page Builder
+            </span>
+            <h1 className="mt-5 text-4xl font-bold md:text-5xl">
+              Buat banyak <span className="text-ember-gradient">landing page promosi</span>
+            </h1>
+          </div>
+          {isAuthenticated && (
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowSettingsDialog(true)}
+                className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium transition-colors hover:bg-secondary"
+                title="Pengaturan Admin"
+              >
+                <Settings className="h-3.5 w-3.5" />
+              </button>
+              <button
+                onClick={() => {
+                  logout();
+                  setIsAuthenticated(false);
+                  setShowAuthDialog(true);
+                  toast.info("Logged out");
+                }}
+                className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium transition-colors hover:bg-secondary text-destructive hover:border-destructive/50"
+                title="Logout"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          )}
+        </div>
         <p className="mt-4 max-w-2xl text-muted-foreground">
-          Setiap landing page punya link tujuan sendiri (contoh: <code className="text-ember">/p/promo-ramadan</code>).
-          Ubah headline, fitur, harga, dan tombol order sesuai kampanye.
+          Setiap landing page punya link tujuan sendiri (contoh:{" "}
+          <code className="text-ember">/p/promo-ramadan</code>). Ubah headline, fitur, harga, dan
+          tombol order sesuai kampanye.
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3">

@@ -2,15 +2,14 @@
 
 Buatkan website landing page yang isi website nya berisi promosi produk yang ingin di jual, buat website nya agar bisa Create banyak website landing page sesuai link tujuan yang ingin di buat
 
-This project was built with [Lovable](https://lovable.dev).
+Professional Landing Page Builder - Create and manage multiple landing pages with ease.
 
-## Build with Lovable
+## Features
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/abaf5ad6-57f8-4c23-9c35-b580f53bb925).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+- **Create Multiple Landing Pages**: Build as many landing pages as you need for different campaigns
+- **Easy Editor**: Drag-and-drop interface for easy customization
+- **Full Ownership**: This code is yours. Customize and deploy as needed.
+- **Professional Design**: Pre-built templates and themes for quick setup
 
 ## Development
 

@@ -1,5 +1,19 @@
 export type Feature = { title: string; description: string };
-export type Plan = { name: string; price: string; period: string; features: string; highlighted: boolean };
+export type Plan = {
+  name: string;
+  price: string;
+  period: string;
+  features: string;
+  highlighted: boolean;
+};
+
+export type ThemeColors = {
+  primaryColor: string;
+  accentColor: string;
+  backgroundColor: string;
+  textColor: string;
+  mutedColor: string;
+};
 
 export type LandingPage = {
   slug: string;
@@ -20,6 +34,7 @@ export type LandingPage = {
   testimonialAuthor: string;
   footerNote: string;
   whatsapp: string;
+  theme?: ThemeColors;
 };
 
 const KEY = "emberpage.pages.v1";
@@ -54,21 +69,58 @@ export function emptyPage(slug = ""): LandingPage {
       { value: "24/7", label: "Support admin" },
     ],
     features: [
-      { title: "Full Akses Panel", description: "Kelola file, console, dan restart bot langsung dari Pterodactyl." },
-      { title: "NVMe & CPU Kencang", description: "Server NVMe dengan CPU high clock, bot jalan tanpa nge-lag." },
-      { title: "Auto Restart", description: "Bot mati otomatis dinyalakan lagi, tidak perlu jaga 24 jam." },
-      { title: "Aktivasi Instan", description: "Setelah bayar, akun panel langsung dikirim otomatis." },
+      {
+        title: "Full Akses Panel",
+        description: "Kelola file, console, dan restart bot langsung dari Pterodactyl.",
+      },
+      {
+        title: "NVMe & CPU Kencang",
+        description: "Server NVMe dengan CPU high clock, bot jalan tanpa nge-lag.",
+      },
+      {
+        title: "Auto Restart",
+        description: "Bot mati otomatis dinyalakan lagi, tidak perlu jaga 24 jam.",
+      },
+      {
+        title: "Aktivasi Instan",
+        description: "Setelah bayar, akun panel langsung dikirim otomatis.",
+      },
     ],
     plans: [
-      { name: "Starter", price: "Rp5.000", period: "/bulan", features: "1GB RAM\n50% CPU\n5GB SSD\n1 Bot", highlighted: false },
-      { name: "Pro", price: "Rp15.000", period: "/bulan", features: "4GB RAM\n150% CPU\n20GB SSD\nUnlimited Bot", highlighted: true },
-      { name: "Unlimited", price: "Rp35.000", period: "/bulan", features: "Unlimited RAM\n400% CPU\n60GB SSD\nPriority Support", highlighted: false },
+      {
+        name: "Starter",
+        price: "Rp5.000",
+        period: "/bulan",
+        features: "1GB RAM\n50% CPU\n5GB SSD\n1 Bot",
+        highlighted: false,
+      },
+      {
+        name: "Pro",
+        price: "Rp15.000",
+        period: "/bulan",
+        features: "4GB RAM\n150% CPU\n20GB SSD\nUnlimited Bot",
+        highlighted: true,
+      },
+      {
+        name: "Unlimited",
+        price: "Rp35.000",
+        period: "/bulan",
+        features: "Unlimited RAM\n400% CPU\n60GB SSD\nPriority Support",
+        highlighted: false,
+      },
     ],
     testimonial:
       "Sudah 8 bulan pakai panelnya buat 12 bot WhatsApp, belum pernah down. Adminnya fast response banget.",
     testimonialAuthor: "Rizky — Owner Bot Store",
     footerNote: "Pembayaran via QRIS, Dana, Gopay, dan transfer bank.",
     whatsapp: "6281234567890",
+    theme: {
+      primaryColor: "#ff6b35",
+      accentColor: "#ff6b35",
+      backgroundColor: "#0a0e27",
+      textColor: "#f5f5f5",
+      mutedColor: "#7a8b99",
+    },
   };
 }
 

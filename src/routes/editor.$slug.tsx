@@ -1,25 +1,38 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { ArrowLeft, Eye, Plus, Save, Trash2 } from "lucide-react";
+import { ArrowLeft, Eye, Plus, Save, Trash2, Settings, LogOut } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { LandingView } from "@/components/LandingView";
-import { emptyPage, getPage, loadPages, slugify, upsertPage, type LandingPage } from "@/lib/landing-store";
+import { ThemeColorPicker } from "@/components/ThemeColorPicker";
+import { AuthDialog } from "@/components/AuthDialog";
+import { AdminSettingsDialog } from "@/components/AdminSettingsDialog";
+import {
+  emptyPage,
+  getPage,
+  loadPages,
+  slugify,
+  upsertPage,
+  type LandingPage,
+} from "@/lib/landing-store";
+import { isSessionActive, initializeAuth, logout } from "@/lib/auth-store";
 
 export const Route = createFileRoute("/editor/$slug")({
   head: () => ({
     meta: [
-      { title: "Editor Landing Page — NodeEmber Builder" },
+      { title: "Editor Landing Page — Multi Lander Magic" },
       {
         name: "description",
-        content: "Ubah headline, fitur, paket harga, dan link tujuan landing page promosi produk kamu.",
+        content:
+          "Edit headline, fitur, paket harga, dan link tujuan landing page Anda dengan mudah.",
       },
-      { property: "og:title", content: "Editor Landing Page — NodeEmber Builder" },
+      { property: "og:title", content: "Editor Landing Page — Multi Lander Magic" },
       {
         property: "og:description",
-        content: "Editor visual untuk landing page promosi dengan preview langsung.",
+        content:
+          "Editor visual untuk landing page dengan preview langsung dan tema yang dapat disesuaikan.",
       },
     ],
   }),
@@ -41,8 +54,23 @@ function Editor() {
   const isNew = slug === "baru";
   const [page, setPage] = useState<LandingPage | null>(null);
   const [originalSlug, setOriginalSlug] = useState("");
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [showSettingsDialog, setShowSettingsDialog] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
+    initializeAuth();
+    const authenticated = isSessionActive();
+    setIsAuthenticated(authenticated);
+
+    if (!authenticated) {
+      setShowAuthDialog(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
     if (isNew) {
       setPage({ ...emptyPage("promo-baru") });
       setOriginalSlug("");
@@ -51,9 +79,9 @@ function Editor() {
       setPage(found ? { ...found } : { ...emptyPage(slug) });
       setOriginalSlug(slug);
     }
-  }, [slug, isNew]);
+  }, [slug, isNew, isAuthenticated]);
 
-  if (!page) return <div className="min-h-screen bg-background" />;
+  if (!page || !isAuthenticated) return <div className="min-h-screen bg-background" />;
 
   const set = <K extends keyof LandingPage>(key: K, value: LandingPage[K]) =>
     setPage({ ...page, [key]: value });
@@ -76,9 +104,19 @@ function Editor() {
 
   return (
     <div className="min-h-screen bg-background">
+      <AuthDialog
+        open={showAuthDialog}
+        onClose={() => setShowAuthDialog(false)}
+        onSuccess={() => setIsAuthenticated(true)}
+      />
+      <AdminSettingsDialog open={showSettingsDialog} onClose={() => setShowSettingsDialog(false)} />
+
       <div className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-5 py-3">
-          <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+          >
             <ArrowLeft className="h-4 w-4" /> Dashboard
           </Link>
           <div className="flex items-center gap-2">
@@ -92,6 +130,25 @@ function Editor() {
               </Link>
             )}
             <button
+              onClick={() => setShowSettingsDialog(true)}
+              className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium hover:bg-secondary"
+              title="Pengaturan Admin"
+            >
+              <Settings className="h-3.5 w-3.5" />
+            </button>
+            <button
+              onClick={() => {
+                logout();
+                setIsAuthenticated(false);
+                setShowAuthDialog(true);
+                toast.info("Logged out");
+              }}
+              className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-medium hover:bg-secondary text-destructive hover:border-destructive/50"
+              title="Logout"
+            >
+              <LogOut className="h-3.5 w-3.5" />
+            </button>
+            <button
               onClick={save}
               className="inline-flex items-center gap-2 rounded-full bg-ember-gradient px-5 py-2 text-xs font-semibold text-ember-foreground shadow-ember"
             >
@@ -104,11 +161,17 @@ function Editor() {
       <div className="mx-auto grid max-w-7xl gap-8 px-5 py-8 lg:grid-cols-[380px_1fr]">
         <div className="space-y-6">
           <section className="space-y-4 rounded-2xl border border-border bg-surface p-5">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-ember">Link & Brand</h2>
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-ember">
+              Link & Brand
+            </h2>
             <Field label="Link tujuan (slug)">
               <div className="flex items-center gap-2">
                 <span className="text-xs text-muted-foreground">/p/</span>
-                <Input value={page.slug} onChange={(e) => set("slug", e.target.value)} placeholder="promo-ramadan" />
+                <Input
+                  value={page.slug}
+                  onChange={(e) => set("slug", e.target.value)}
+                  placeholder="promo-ramadan"
+                />
               </div>
             </Field>
             <Field label="Nama brand">
@@ -122,13 +185,25 @@ function Editor() {
           <section className="space-y-4 rounded-2xl border border-border bg-surface p-5">
             <h2 className="text-sm font-semibold uppercase tracking-wider text-ember">Hero</h2>
             <Field label="Headline">
-              <Textarea rows={2} value={page.headline} onChange={(e) => set("headline", e.target.value)} />
+              <Textarea
+                rows={2}
+                value={page.headline}
+                onChange={(e) => set("headline", e.target.value)}
+              />
             </Field>
             <Field label="Sub headline">
-              <Textarea rows={3} value={page.subheadline} onChange={(e) => set("subheadline", e.target.value)} />
+              <Textarea
+                rows={3}
+                value={page.subheadline}
+                onChange={(e) => set("subheadline", e.target.value)}
+              />
             </Field>
             <Field label="URL gambar hero (opsional)">
-              <Input value={page.heroImage} onChange={(e) => set("heroImage", e.target.value)} placeholder="https://..." />
+              <Input
+                value={page.heroImage}
+                onChange={(e) => set("heroImage", e.target.value)}
+                placeholder="https://..."
+              />
             </Field>
             <div className="grid grid-cols-2 gap-3">
               <Field label="Teks tombol utama">
@@ -138,10 +213,16 @@ function Editor() {
                 <Input value={page.ctaUrl} onChange={(e) => set("ctaUrl", e.target.value)} />
               </Field>
               <Field label="Teks tombol kedua">
-                <Input value={page.secondaryLabel} onChange={(e) => set("secondaryLabel", e.target.value)} />
+                <Input
+                  value={page.secondaryLabel}
+                  onChange={(e) => set("secondaryLabel", e.target.value)}
+                />
               </Field>
               <Field label="Link tombol kedua">
-                <Input value={page.secondaryUrl} onChange={(e) => set("secondaryUrl", e.target.value)} />
+                <Input
+                  value={page.secondaryUrl}
+                  onChange={(e) => set("secondaryUrl", e.target.value)}
+                />
               </Field>
             </div>
             <Field label="Link Tujuan">
@@ -195,7 +276,12 @@ function Editor() {
                   }}
                 />
                 <button
-                  onClick={() => set("features", page.features.filter((_, x) => x !== i))}
+                  onClick={() =>
+                    set(
+                      "features",
+                      page.features.filter((_, x) => x !== i),
+                    )
+                  }
                   className="inline-flex items-center gap-1.5 text-xs text-destructive"
                 >
                   <Trash2 className="h-3.5 w-3.5" /> Hapus fitur
@@ -203,7 +289,12 @@ function Editor() {
               </div>
             ))}
             <button
-              onClick={() => set("features", [...page.features, { title: "Fitur baru", description: "Deskripsi fitur." }])}
+              onClick={() =>
+                set("features", [
+                  ...page.features,
+                  { title: "Fitur baru", description: "Deskripsi fitur." },
+                ])
+              }
               className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs hover:bg-secondary"
             >
               <Plus className="h-3.5 w-3.5" /> Tambah fitur
@@ -211,7 +302,9 @@ function Editor() {
           </section>
 
           <section className="space-y-4 rounded-2xl border border-border bg-surface p-5">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-ember">Paket harga</h2>
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-ember">
+              Paket harga
+            </h2>
             {page.plans.map((plan, i) => (
               <div key={i} className="space-y-2 rounded-xl border border-border p-3">
                 <Input
@@ -255,14 +348,22 @@ function Editor() {
                       type="checkbox"
                       checked={plan.highlighted}
                       onChange={(e) => {
-                        const plans = page.plans.map((p, x) => ({ ...p, highlighted: x === i ? e.target.checked : false }));
+                        const plans = page.plans.map((p, x) => ({
+                          ...p,
+                          highlighted: x === i ? e.target.checked : false,
+                        }));
                         set("plans", plans);
                       }}
                     />
                     Tandai terlaris
                   </label>
                   <button
-                    onClick={() => set("plans", page.plans.filter((_, x) => x !== i))}
+                    onClick={() =>
+                      set(
+                        "plans",
+                        page.plans.filter((_, x) => x !== i),
+                      )
+                    }
                     className="inline-flex items-center gap-1.5 text-destructive"
                   >
                     <Trash2 className="h-3.5 w-3.5" /> Hapus
@@ -274,7 +375,13 @@ function Editor() {
               onClick={() =>
                 set("plans", [
                   ...page.plans,
-                  { name: "Paket Baru", price: "Rp0", period: "/bulan", features: "Fitur 1\nFitur 2", highlighted: false },
+                  {
+                    name: "Paket Baru",
+                    price: "Rp0",
+                    period: "/bulan",
+                    features: "Fitur 1\nFitur 2",
+                    highlighted: false,
+                  },
                 ])
               }
               className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs hover:bg-secondary"
@@ -286,14 +393,43 @@ function Editor() {
           <section className="space-y-4 rounded-2xl border border-border bg-surface p-5">
             <h2 className="text-sm font-semibold uppercase tracking-wider text-ember">Penutup</h2>
             <Field label="Quoted">
-              <Textarea rows={3} value={page.testimonial} onChange={(e) => set("testimonial", e.target.value)} />
+              <Textarea
+                rows={3}
+                value={page.testimonial}
+                onChange={(e) => set("testimonial", e.target.value)}
+              />
             </Field>
             <Field label="Footer">
-              <Input value={page.testimonialAuthor} onChange={(e) => set("testimonialAuthor", e.target.value)} />
+              <Input
+                value={page.testimonialAuthor}
+                onChange={(e) => set("testimonialAuthor", e.target.value)}
+              />
             </Field>
             <Field label="Catatan penutup">
-              <Textarea rows={2} value={page.footerNote} onChange={(e) => set("footerNote", e.target.value)} />
+              <Textarea
+                rows={2}
+                value={page.footerNote}
+                onChange={(e) => set("footerNote", e.target.value)}
+              />
             </Field>
+          </section>
+
+          <section className="space-y-4 rounded-2xl border border-border bg-surface p-5">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-ember">
+              Tema Warna
+            </h2>
+            <ThemeColorPicker
+              theme={
+                page.theme || {
+                  primaryColor: "#ff6b35",
+                  accentColor: "#ff6b35",
+                  backgroundColor: "#0a0e27",
+                  textColor: "#f5f5f5",
+                  mutedColor: "#7a8b99",
+                }
+              }
+              onThemeChange={(theme) => set("theme", theme)}
+            />
           </section>
         </div>
 
