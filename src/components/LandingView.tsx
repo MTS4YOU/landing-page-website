@@ -151,8 +151,8 @@ export function LandingView({ page }: { page: LandingPage }) {
       </section>
 
       <section id="harga" className="mx-auto max-w-6xl px-5 py-16">
-        <h2 className="text-3xl font-bold md:text-4xl">Pilih paketmu</h2>
-        <p className="mt-3 text-muted-foreground">Semua paket aktif instan setelah pembayaran.</p>
+        <h2 className="text-3xl font-bold md:text-4xl">Daftar Harga</h2>
+        <p className="mt-3 text-muted-foreground">Harga Panel Yang Sangat Terjangkau dan Kualitas Server Yang Stabil.</p>
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {page.plans.map((plan, i) => (
             <div
@@ -220,7 +220,7 @@ export function LandingView({ page }: { page: LandingPage }) {
                       }
                 }
               >
-                Order {plan.name}
+                Order Sekarang
               </a>
             </div>
           ))}
@@ -251,7 +251,7 @@ export function LandingView({ page }: { page: LandingPage }) {
             border: `1px solid ${theme.primaryColor}40`,
           }}
         >
-          <h2 className="text-3xl font-bold md:text-4xl">Link Download Di Bawah</h2>
+          <h2 className="text-3xl font-bold md:text-4xl">LINK DOWNLOAD DI BAWAH</h2>
           <p className="mx-auto mt-3 max-w-xl text-muted-foreground">{page.footerNote}</p>
           <a
             href={page.whatsapp}
