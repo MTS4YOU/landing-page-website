@@ -29,7 +29,7 @@ export function LandingView({ page }: { page: LandingPage }) {
     <div className="min-h-screen bg-background text-foreground" style={themeStyle}>
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-          <span className="font-display text-lg font-bold tracking-tight">{page.brand}</span>
+          <span className="font-display text-lg font-bold tracking-tight">LINK DOWNLOAD DI BAWAH</span>
           <a
             href={page.ctaUrl || "#harga"}
             className="rounded-full px-5 py-2 text-sm font-semibold text-ember-foreground transition-transform hover:scale-[1.03]"
@@ -251,7 +251,7 @@ export function LandingView({ page }: { page: LandingPage }) {
             border: `1px solid ${theme.primaryColor}40`,
           }}
         >
-          <h2 className="text-3xl font-bold md:text-4xl">LINK DOWNLOAD DI BAWAH</h2>
+          <h2 className="text-3xl font-bold md:text-4xl">{page.brand}</h2>
           <p className="mx-auto mt-3 max-w-xl text-muted-foreground">{page.footerNote}</p>
           <a
             href={page.whatsapp}
