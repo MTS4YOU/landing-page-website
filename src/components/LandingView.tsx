@@ -124,7 +124,7 @@ export function LandingView({ page }: { page: LandingPage }) {
                   ))}
               </ul>
               <a
-                href={page.whatsapp ? `${page.whatsapp}` : page.ctaUrl}
+                href={page.ctaUrl}
                 className={
                   plan.highlighted
                     ? "mt-7 block rounded-full bg-ember-gradient py-3 text-center text-sm font-semibold text-ember-foreground"
