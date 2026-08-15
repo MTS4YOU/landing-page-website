@@ -119,7 +119,7 @@ export function LandingView({ page }: { page: LandingPage }) {
       </section>
 
       <section className="mx-auto max-w-6xl px-5 py-16">
-        <h2 className="text-3xl font-bold md:text-4xl">Mengapa Memilih Kami?</h2>
+        <h2 className="text-3xl font-bold md:text-4xl">Mengapa memilih kami?</h2>
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {page.features.map((f, i) => {
             const Icon = icons[i % icons.length]!;
@@ -151,8 +151,8 @@ export function LandingView({ page }: { page: LandingPage }) {
       </section>
 
       <section id="harga" className="mx-auto max-w-6xl px-5 py-16">
-        <h2 className="text-3xl font-bold md:text-4xl">Daftar Harga</h2>
-        <p className="mt-3 text-muted-foreground">Harga Panel Yang Sangat Terjangkau dan Kualitas Server Yang Stabil.</p>
+        <h2 className="text-3xl font-bold md:text-4xl">DAFTAR HARGA</h2>
+        <p className="mt-3 text-muted-foreground">Harga panel yang telah kami sediakan sangat terjangkau dengan kualitas server yang stabil.</p>
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {page.plans.map((plan, i) => (
             <div
@@ -267,7 +267,7 @@ export function LandingView({ page }: { page: LandingPage }) {
       </section>
 
       <footer className="border-t border-border py-8 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} {page.brand}. Semua hak dilindungi.
+        © {new Date().getFullYear()} TokoPanel Official. Semua hak dilindungi.
       </footer>
     </div>
   );
