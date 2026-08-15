@@ -122,34 +122,37 @@ export function LandingView({ page }: { page: LandingPage }) {
         <h2 className="text-3xl font-bold md:text-4xl">Mengapa memilih kami?</h2>
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {page.features.map((f, i) => {
-            const Icon = icons[i % icons.length]!;
-            return (
-              <div
-                key={f.title + i}
-                className="rounded-2xl border border-border bg-surface-gradient p-6 transition-colors hover:border-opacity-60"
-                style={{
-                  borderColor: theme.primaryColor,
-                }}
-              >
-                <div className="flex items-center gap-3">
-                <span
-                className="inline-flex h-10 w-10 items-center justify-center rounded-xl"
-                style={{
-                backgroundColor: `${theme.primaryColor}15`,
-                color: theme.primaryColor,
-                }}
-                >
-                <Icon className="h-5 w-5" />
-                </span>
-                
-                <h3 className="text-lg font-semibold">{f.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                </div>
-                  {f.description}
-                </p>
-              </div>
-            );
-          })}
+  const Icon = icons[i % icons.length];
+  return (
+    <div
+      key={f.title + i}
+      className="rounded-2xl border border-border bg-surface-gradient p-6 transition-colors hover:border-opacity-60"
+      style={{
+        borderColor: theme.primaryColor,
+      }}
+    >
+      {/* Icon & Title sebaris */}
+      <div className="flex items-center gap-3">
+        <span
+          className="inline-flex h-10 w-10 items-center justify-center rounded-xl"
+          style={{
+            backgroundColor: `${theme.primaryColor}15`,
+            color: theme.primaryColor,
+          }}
+        >
+          <Icon className="h-5 w-5" />
+        </span>
+
+        <h3 className="text-lg font-semibold">{f.title}</h3>
+      </div>
+
+      {/* Deskripsi berada di bawah icon & title */}
+      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+        {f.description}
+      </p>
+    </div>
+  );
+})}
         </div>
       </section>
 
