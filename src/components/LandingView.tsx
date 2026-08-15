@@ -1,8 +1,8 @@
 import type { LandingPage } from "@/lib/landing-store";
 import heroImage from "@/assets/hero-panel.jpg";
-import { Check, Zap, ShieldCheck, Rocket, Server } from "lucide-react";
+import { Check, ShieldCheck, Zap, Shield, QrCode, CreditCard, Server, Gauge } from "lucide-react";
 
-const icons = [Server, Zap, ShieldCheck, Rocket];
+const icons = [ShieldCheck, Zap, Shield, QrCode, CreditCard, Server, Gauge];
 
 export function LandingView({ page }: { page: LandingPage }) {
   const hero = page.heroImage?.trim() ? page.heroImage : heroImage;
@@ -131,7 +131,7 @@ export function LandingView({ page }: { page: LandingPage }) {
                   borderColor: theme.primaryColor,
                 }}
               >
-                <span
+                /*<span
                   className="inline-flex h-10 w-10 items-center justify-center rounded-xl"
                   style={{
                     backgroundColor: `${theme.primaryColor}15`,
@@ -141,7 +141,22 @@ export function LandingView({ page }: { page: LandingPage }) {
                   <Icon className="h-5 w-5" />
                 </span>
                 <h3 className="mt-4 text-lg font-semibold">{f.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">*/
+                {/* Bungkus icon & h3 ke dalam flex container */}
+                <div className="flex items-center gap-3">
+                <span
+                className="inline-flex h-10 w-10 items-center justify-center rounded-xl"
+                style={{
+                backgroundColor: `${theme.primaryColor}15`,
+                color: theme.primaryColor,
+                }}
+                >
+                <Icon className="h-5 w-5" />
+                </span>
+                
+                {/* Hapus class 'mt-4' di sini agar rapi sebaris */}
+                <h3 className="text-lg font-semibold">{f.title}</h3>
+                </div>
                   {f.description}
                 </p>
               </div>
