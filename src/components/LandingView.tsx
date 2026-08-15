@@ -261,7 +261,7 @@ export function LandingView({ page }: { page: LandingPage }) {
               color: theme.textColor,
             }}
           >
-            CLICK DI SINI
+            ⎙ 𝗖𝗟𝗜𝗖𝗞 𝗗𝗜 𝗦𝗜𝗡𝗜 ⎙
           </a>
         </div>
       </section>
