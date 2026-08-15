@@ -131,7 +131,6 @@ export function LandingView({ page }: { page: LandingPage }) {
                   borderColor: theme.primaryColor,
                 }}
               >
-
                 <div className="flex items-center gap-3">
                 <span
                 className="inline-flex h-10 w-10 items-center justify-center rounded-xl"
@@ -143,8 +142,8 @@ export function LandingView({ page }: { page: LandingPage }) {
                 <Icon className="h-5 w-5" />
                 </span>
                 
-                {/* Hapus class 'mt-4' di sini agar rapi sebaris */}
                 <h3 className="text-lg font-semibold">{f.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 </div>
                   {f.description}
                 </p>
